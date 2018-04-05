@@ -45,8 +45,21 @@ router.get('/login', (req, res)=> {
 });
 
 router.get('/profile', (req, res)=> {
-    console.log("Here: ", req.session);
-    res.send({bahur: 'bahur'});
+    deserializeUser(req.session.id).then(user => {
+        console.log(user);
+        console.log(req.session.id);
+        if (user) {
+            res.send(user);
+        } else {
+            res.status(404);
+            res.send({message: 'User was not found!'});
+        }
+    })
+});
+
+router.get('/logout', (req, res) => {
+    req.session = null;
+    res.send('User successfuly logged out');
 });
 
 function serializeUser(user) {
@@ -54,7 +67,7 @@ function serializeUser(user) {
 }
 
 function deserializeUser(userId) {
-    return User.findOne({id: userId})
+    return User.findOne({_id: userId});
 }
 
 module.exports = router;
