@@ -20,7 +20,8 @@ app.use(function (req, res, next) {
 app.use(cookieSession({
     name: 'biscuit',
     keys: ['superSecretniqStringKoitoNikojNqmaDaOtgatne'],
-    maxAge: 24 * 60 * 60 * 1000
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: false
 }));
 
 
