@@ -15,7 +15,7 @@ router.get('/login', (req, res)=> {
     verifyToken(req.query.access_token).then(data => {
 
         httpService.get(urls.googleGetUserDataUrl + req.query.access_token).then(profile => {
-
+            console.dir(profile);
             User.findOne({googleId: profile.id}).then((existingUser)=> {
                 if (existingUser) {
                     console.log('user is already in store: ', existingUser);
@@ -24,7 +24,8 @@ router.get('/login', (req, res)=> {
                 } else {
                     new User({
                         username: profile.displayName,
-                        googleId: profile.id
+                        googleId: profile.id,
+                        image: profile.image
                     }).save().then(newUser => {
                         console.log('new User created ', newUser);
                         req.session = {id: serializeUser(newUser)};
