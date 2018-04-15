@@ -20,7 +20,7 @@ router.get('/login', (req, res)=> {
                 if (existingUser) {
                     console.log('user is already in store: ', existingUser);
                     req.session = {id: serializeUser(existingUser)};
-                    res.send(profile);
+                    res.send(existingUser);
                 } else {
                     new User({
                         username: profile.displayName,
@@ -28,7 +28,7 @@ router.get('/login', (req, res)=> {
                     }).save().then(newUser => {
                         console.log('new User created ', newUser);
                         req.session = {id: serializeUser(newUser)};
-                        res.send(profile);
+                        res.send(newUser);
                     });
                 }
             });
@@ -59,7 +59,7 @@ router.get('/profile', (req, res)=> {
 
 router.get('/logout', (req, res) => {
     req.session = null;
-    res.send('User successfuly logged out');
+    res.send({message: 'User successfuly logged out'});
 });
 
 function serializeUser(user) {
